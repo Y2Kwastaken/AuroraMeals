@@ -1,17 +1,15 @@
 package sh.miles.aurorameals.gui;
 
 import com.google.common.base.Preconditions;
-import com.pixelduke.transit.Style;
-import com.pixelduke.transit.TransitTheme;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import sh.miles.aurorameals.util.Utils;
 import sh.miles.aurorameals.gui.custom.Modal;
 import sh.miles.aurorameals.util.Pair;
+import sh.miles.aurorameals.util.Utils;
 
 import java.util.HashMap;
 import java.util.Map;
