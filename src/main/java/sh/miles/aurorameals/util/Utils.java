@@ -1,4 +1,4 @@
-package sh.miles.aurorameals;
+package sh.miles.aurorameals.util;
 
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXMLLoader;
@@ -20,12 +20,17 @@ public final class Utils {
     private Utils() {
     }
 
-    public static Parent loadFxmlFile(Class<?> clazz, @NotNull final String resource) {
+    public static Pair<Parent, Object> loadFxmlFile(Class<?> clazz, @NotNull final String resource) {
         try {
-            return FXMLLoader.load(clazz.getClassLoader().getResource(resource));
+            final FXMLLoader loader = new FXMLLoader(clazz.getClassLoader().getResource(resource));
+            return Pair.of(loader.load(), loader.getController());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static String loadStyleSheet(Class<?> clazz, @NotNull final String resource) {
+        return clazz.getClassLoader().getResource(resource).toExternalForm();
     }
 
     public static Image getImageIcon(@NotNull final String resource) {

@@ -5,32 +5,47 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="800.0" style="-fx-border-color: gray; -fx-border-width: 1;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sh.miles.aurorameals.gui.controller.MealHomeController">
+<GridPane maxHeight="Infinity" maxWidth="Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sh.miles.aurorameals.gui.controller.MealHomeController">
   <columnConstraints>
-    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-    <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+    <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="266.0" />
+    <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="530.0" />
   </columnConstraints>
   <rowConstraints>
-    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS" />
+    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="ALWAYS" />
   </rowConstraints>
    <children>
-      <VBox spacing="2.0" style="-fx-border-color: gray; -fx-border-width: 2;" GridPane.hgrow="ALWAYS" GridPane.rowSpan="2" GridPane.vgrow="ALWAYS">
+      <VBox maxHeight="Infinity" maxWidth="Infinity" spacing="2.0" GridPane.hgrow="ALWAYS" GridPane.rowSpan="2" GridPane.vgrow="ALWAYS">
          <children>
-            <HBox>
+            <HBox fillHeight="false" maxHeight="Infinity" maxWidth="Infinity" spacing="2.0">
                <children>
-                  <Label text="Recipes" HBox.hgrow="ALWAYS">
+                  <Label maxHeight="Infinity" maxWidth="Infinity" text="Recipes" HBox.hgrow="ALWAYS">
                      <HBox.margin>
-                        <Insets left="5.0" right="5.0" top="4.0" />
+                        <Insets left="2.0" top="1.0" />
                      </HBox.margin>
                   </Label>
-                  <Region HBox.hgrow="ALWAYS" />
-                  <Button mnemonicParsing="false" style="-fx-background-color: transparent; -fx-border-color: gray;" text="Create Recipe" />
+                  <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onCreateRecipe" text="Create Recipe" HBox.hgrow="ALWAYS">
+                     <padding>
+                        <Insets left="2.0" right="2.0" />
+                     </padding></Button>
+                  <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onEditRecipe" text="Edit Recipe" HBox.hgrow="ALWAYS">
+                     <padding>
+                        <Insets left="2.0" right="2.0" />
+                     </padding>
+                  </Button>
                </children>
             </HBox>
-            <HBox prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+            <HBox maxHeight="Infinity" maxWidth="Infinity" VBox.vgrow="ALWAYS">
                <children>
-                  <ListView fx:id="savedRecipesView" prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+                  <ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="Infinity" maxWidth="Infinity" HBox.hgrow="ALWAYS">
+                    <content>
+                      <AnchorPane maxHeight="Infinity" maxWidth="Infinity">
+                           <children>
+                              <ListView fx:id="savedRecipesView" maxHeight="Infinity" maxWidth="Infinity" onMouseClicked="#onRecipeSelect" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                           </children>
+                        </AnchorPane>
+                    </content>
+                  </ScrollPane>
                </children>
             </HBox>
          </children>
@@ -40,12 +55,49 @@
          <padding>
             <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
          </padding></VBox>
-      <VBox spacing="2.0" style="-fx-border-color: gray; -fx-border-width: 2;" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowSpan="2" GridPane.vgrow="ALWAYS">
+      <VBox maxHeight="Infinity" maxWidth="Infinity" spacing="2.0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowSpan="2" GridPane.vgrow="ALWAYS">
          <children>
-            <HBox alignment="TOP_RIGHT" VBox.vgrow="ALWAYS">
+            <HBox maxHeight="Infinity" maxWidth="Infinity">
                <children>
+                  <Region maxHeight="Infinity" maxWidth="Infinity" HBox.hgrow="ALWAYS" />
+                  <Label fx:id="recipeNameLabel" maxHeight="Infinity" maxWidth="Infinity" HBox.hgrow="ALWAYS" />
                   <ImageView fx:id="selectedRecipeImage" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS" />
                </children>
+            </HBox>
+            <HBox maxHeight="Infinity" maxWidth="Infinity" VBox.vgrow="ALWAYS">
+               <children>
+                  <VBox alignment="TOP_CENTER" maxHeight="Infinity" maxWidth="Infinity" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Label text="Ingredients" textAlignment="CENTER" VBox.vgrow="ALWAYS" />
+                        <ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="Infinity" maxWidth="Infinity" VBox.vgrow="ALWAYS">
+                          <content>
+                            <AnchorPane maxHeight="Infinity" maxWidth="Infinity">
+                                 <children>
+                                    <ListView fx:id="ingredientsListView" maxHeight="Infinity" maxWidth="Infinity" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                 </children>
+                              </AnchorPane>
+                          </content>
+                        </ScrollPane>
+                     </children>
+                  </VBox>
+                  <VBox alignment="TOP_CENTER" maxHeight="Infinity" maxWidth="Infinity" HBox.hgrow="ALWAYS">
+                     <children>
+                        <Label text="Instructions" VBox.vgrow="ALWAYS" />
+                        <ScrollPane fitToHeight="true" fitToWidth="true" maxHeight="Infinity" maxWidth="Infinity" VBox.vgrow="ALWAYS">
+                          <content>
+                            <AnchorPane maxHeight="Infinity" maxWidth="Infinity">
+                                 <children>
+                                    <ListView fx:id="instructionsListView" maxHeight="Infinity" maxWidth="Infinity" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                 </children>
+                              </AnchorPane>
+                          </content>
+                        </ScrollPane>
+                     </children>
+                  </VBox>
+               </children>
+               <padding>
+                  <Insets left="1.0" right="1.0" />
+               </padding>
             </HBox>
          </children>
          <padding>

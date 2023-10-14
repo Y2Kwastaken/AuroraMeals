@@ -1,0 +1,90 @@
+* {
+    -smokey-white: rgb(233, 228, 220);
+    -accent: rgb(27, 84, 124);
+    -hover-accent: rgb(232, 219, 218);
+    -text-main: rgb(0, 0, 0);
+    -text-hover: rgb(100, 100, 100);
+
+    -fx-text-fill: -text-main;
+}
+
+.root {
+    -fx-background-color: -smokey-white;
+}
+
+.button {
+    -fx-background-color: -smokey-white;
+}
+
+.button:hover {
+    -fx-background-color: -hover-accent;
+    -fx-text-fill: -text-hover;
+}
+
+.scroll-pane {
+    -fx-background-color: -smokey-white;
+}
+
+.list-view {
+    -fx-background-color: -smokey-white;
+    -fx-border-color: -accent;
+}
+
+.list-cell {
+    -fx-background-color: -smokey-white;
+}
+
+.list-cell:filled:hover {
+    -fx-background-color: -hover-accent;
+    -fx-border-color: -smokey-white;
+    -fx-text-fill: -text-hover;
+}
+
+.text-area {
+    -fx-background-color: -smokey-white;
+    -fx-border-color: -accent;
+}
+
+.text-field {
+    -fx-background-color: -smokey-white;
+    -fx-border-color: -accent;
+}
+
+.text-field:hover {
+    -fx-background-color: -hover-accent;
+    -fx-text-fill: -text-hover;
+}
+
+.combo-box {
+    -fx-background-color: -smokey-white;
+    -fx-border-color: -accent;
+}
+
+.combo-box:hover,
+.combo-box:hover .list-cell:selected {
+    -fx-background-color: -hover-accent;
+    -fx-text-fill: -text-hover;
+}
+
+.text-area .content {
+    -fx-background-color: -smokey-white;
+}
+
+.scroll-bar {
+    -fx-background-color: -smokey-white;
+}
+
+.scroll-bar .decrement-button:hover,
+.scroll-bar .increment-button:hover {
+    -fx-background-color: -hover-accent;
+}
+
+.scroll-bar .decrement-button .decrement-arrow:hover,
+.scroll-bar .increment-button .increment-arrow:hover {
+    -fx-background-color: -text-hover;
+}
+
+.scroll-bar:horizontal .thumb,
+.scroll-bar:vertical .thumb {
+    -fx-background-color: -accent;
+}
