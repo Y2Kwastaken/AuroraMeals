@@ -14,11 +14,11 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.stage.Window;
-import sh.miles.aurorameals.Main;
+import org.jetbrains.annotations.Nullable;
 import sh.miles.aurorameals.data.Ingredient;
 import sh.miles.aurorameals.data.Measurement;
 import sh.miles.aurorameals.data.Recipe;
-import sh.miles.aurorameals.data.db.RecipesCache;
+import sh.miles.aurorameals.data.cache.RecipeCache;
 import sh.miles.aurorameals.gui.GuiConstants;
 import sh.miles.aurorameals.gui.StageController;
 import sh.miles.aurorameals.gui.custom.IngredientListCellFactory;
@@ -29,6 +29,7 @@ import java.io.File;
 import java.net.URL;
 import java.util.LinkedList;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 public class MealCreatorController implements Initializable {
 
@@ -44,6 +45,7 @@ public class MealCreatorController implements Initializable {
     private ImageView recipeImage;
     @FXML
     private ListView<Ingredient> ingredientListView;
+
     private Recipe recipe;
 
     public void onImageClick(MouseEvent event) {
@@ -81,66 +83,65 @@ public class MealCreatorController implements Initializable {
 
     public void onRecipeSave(ActionEvent event) {
         if (recipe == null) {
-            Recipe.Builder builder = Recipe.builder()
-                    .setName(recipeNameField.getText())
-                    .setImage(recipeImage.getImage());
+            Recipe.Builder builder = Recipe.builder();
+            builder.setName(recipeNameField.getText());
+            builder.setImage(recipeImage.getImage());
             for (MutableContainer<String> item : instructionListView.getItems()) {
                 builder.addInstruction(item.get());
             }
             for (Ingredient item : ingredientListView.getItems()) {
                 builder.addIngredient(item);
             }
+
             this.recipe = builder.build();
-            RecipesCache.getInstance().addRecipe(this.recipe);
+            RecipeCache.instance.add(this.recipe);
         } else {
-            recipe.setInstructions(new LinkedList<>(instructionListView.getItems().stream().map(MutableContainer::get).toList()));
-            recipe.setIngredients(new LinkedList<>(ingredientListView.getItems()));
-            recipe.setName(recipeNameField.getText());
-            recipe.setImage(recipeImage.getImage());
-            Main.LOGGER.info("Updated Recipe Information");
+            RecipeCache.instance.operate(this.recipe.getUuid(), (recipe) -> {
+                recipe.setName(recipeNameField.getText());
+                recipe.setImage(recipeImage.getImage());
+                recipe.setInstructions(new LinkedList<>(instructionListView.getItems().stream().map(MutableContainer::get).toList()));
+                recipe.setIngredients(new LinkedList<>(ingredientListView.getItems()));
+            });
         }
 
-        final MealHomeController mhc = StageController.getInstance().getController(GuiConstants.HOME_SCENE);
-        mhc.refreshRecipe();
-        mhc.updateRecipeList();
-
-        ((Stage) (saveButton.getScene().getWindow())).close();
+        ((Stage) saveButton.getScene().getWindow()).close();
     }
 
     public void onRecipeDelete(ActionEvent event) {
-        if (recipe == null) {
-            setViewedRecipe(null);
+        if (this.recipe == null) {
+            updateView();
+        } else {
+            RecipeCache.instance.remove(this.recipe);
         }
 
-        RecipesCache.getInstance().removeRecipe(this.recipe);
-        final MealHomeController mhc = StageController.getInstance().getController(GuiConstants.HOME_SCENE);
-        mhc.updateRecipeList();
-        mhc.selectRecipe(null);
         ((Stage) deleteButton.getScene().getWindow()).close();
+    }
+
+    public void setViewedRecipe(@Nullable final Recipe recipe) {
+        this.recipe = recipe;
+        updateView();
+    }
+
+    private void updateView() {
+        recipeNameField.clear();
+        ingredientListView.getItems().clear();
+        instructionListView.getItems().clear();
+        if (this.recipe == null) {
+            recipeImage.setImage(GuiConstants.DEFAULT_RECIPE_ICON);
+            return;
+        }
+
+        recipeNameField.setText(recipe.getName());
+        ingredientListView.getItems().addAll(recipe.getIngredients());
+        instructionListView.getItems().addAll(recipe.getInstructions().stream().map(MutableContainer::of).collect(Collectors.toList()));
+        recipeImage.setImage(recipeImage.getImage());
     }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         ingredientListView.setCellFactory((ListView<Ingredient> view) -> new IngredientListCellFactory().call(view));
         instructionListView.setCellFactory((ListView<MutableContainer<String>> view) -> new TextAreaListCellFactory().call(view));
-        setViewedRecipe(null);
-    }
-
-    public void setViewedRecipe(final Recipe recipe) {
-        instructionListView.getItems().clear();
-        ingredientListView.getItems().clear();
-        recipeNameField.clear();
-        if (recipe == null) {
-            recipeImage.setImage(GuiConstants.DEFAULT_RECIPE_ICON);
-            return;
-        }
-
-        instructionListView.getItems().addAll(recipe.getInstructions().stream().map(MutableContainer::of).toList());
-        ingredientListView.getItems().addAll(recipe.getIngredients());
-        recipeImage.setImage(recipe.getImage());
-        recipeNameField.setText(recipe.getName());
-
-        this.recipe = recipe;
+        this.recipe = null;
     }
 
 }

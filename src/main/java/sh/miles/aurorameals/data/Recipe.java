@@ -79,6 +79,10 @@ public class Recipe {
         return false;
     }
 
+    public Recipe copy() {
+        return new Recipe(uuid, name, image, ingredients, instructions);
+    }
+
     @Override
     public boolean equals(Object object) {
         if (this == object) return true;

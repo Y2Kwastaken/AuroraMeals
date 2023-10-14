@@ -36,8 +36,6 @@ public final class StageController {
         for (String cssFile : cssFiles) {
             scene.getStylesheets().add(Utils.loadStyleSheet(getClass(), "css/%s.css".formatted(cssFile)));
         }
-        // final TransitTheme metro = new TransitTheme(Style.LIGHT);
-        // metro.setScene(scene);
         this.scenes.put(uid, Pair.of(scene, obj.getSecond()));
     }
 

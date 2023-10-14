@@ -3,8 +3,8 @@ package sh.miles.aurorameals;
 import javafx.application.Application;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import sh.miles.aurorameals.data.cache.RecipeCache;
 import sh.miles.aurorameals.data.db.RecipeDAO;
-import sh.miles.aurorameals.data.db.RecipesCache;
 import sh.miles.aurorameals.data.db.RecipesDatabase;
 import sh.miles.aurorameals.system.OperatingSystem;
 import sh.miles.raven.api.RavenAPI;
@@ -13,6 +13,8 @@ import sh.miles.raven.api.database.exception.DatabaseConnectionException;
 import sh.miles.raven.api.support.DatabaseType;
 import sh.miles.raven.core.RavenImplementation;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.List;
 
 public final class Main {
@@ -25,11 +27,15 @@ public final class Main {
     private Main() {
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         if (OperatingSystem.getCurrent() == OperatingSystem.UNKNOWN) {
             // TODO: show error
             LOGGER.fatal("Unknown operating system");
             System.exit(MagicNumbers.EXIT_CODE_ERROR);
+        }
+
+        if (!Files.exists(OperatingSystem.getCurrent().getAppData().resolve(DATA_FOLDER))) {
+            Files.createDirectory(OperatingSystem.getCurrent().getAppData().resolve(DATA_FOLDER));
         }
 
         RavenAPI.setProvider(new RavenImplementation());
@@ -47,7 +53,7 @@ public final class Main {
                 LOGGER.throwing(error);
             }
             for (RecipeDAO recipe : recipes) {
-                RecipesCache.getInstance().addRecipe(RecipeDAO.toRecipe(recipe));
+                RecipeCache.instance.add(RecipeDAO.toRecipe(recipe));
             }
         });
 
